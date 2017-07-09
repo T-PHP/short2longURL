@@ -6,9 +6,13 @@ Supported websites : goo.gl, bit.ly, tiny.cc, ow.ly, u.nu, tinyurl.com and 200+ 
 ## Version 0.1
 - Firt Commit
 
+## Demo
+http://www.t-php.fr/demo/Short2LongURL/
+
 ## Preview
 ![Screenshot 1](img/screen1.png)
 ![Screenshot 2](img/screen2.png)
+
 ## Installation
 
 1. Download script
