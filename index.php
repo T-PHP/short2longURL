@@ -56,12 +56,18 @@
             $urlDecode = htmlspecialchars(urldecode($urlEncode), ENT_QUOTES);
             //Get Headers
             $getHeaders = get_headers($urlDecode, 1);
+            //echo '<pre>'; var_dump($getHeaders); echo '</pre>';
+            if(is_array($getHeaders['Location'])):
+                $location = current($getHeaders['Location']);
+            else:
+                $location = $getHeaders['Location'];
+            endif;
 
             //If Redirect 301, 302 or 303 : Display URL
             if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
                 echo '<p class="alert alert-success text-center">';
                 echo '<span class="glyphicon glyphicon-check" aria-hidden="true"></span> ';
-                echo '<a href="' . $getHeaders['Location'] . '" target="_blank">' . $getHeaders['Location'] . '</a>';
+                echo '<a href="' . $location . '" target="_blank">' . $location . '</a>';
                 echo '</p>';
             else:
                 echo '<p class="alert alert-danger text-center">';
