@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Short to Long URL - Short2LongURL</title>
+    <title>Short to Long Multiple URLs - Short2LongURL</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -32,6 +32,9 @@
         color: #ffffff
     }
 
+    .bg-white {
+        background: #ffffff;
+    }
     /* By Clean Blog https://startbootstrap.com/template-overviews/clean-blog/ */
     .navbar-custom {
         position: absolute;
@@ -132,7 +135,7 @@
             transform: translate3d(0, 100%, 0);
         }
     }
-    /* End By Clean Blog https://startbootstrap.com/template-overviews/clean-blog/ */
+        /* End By Clean Blog https://startbootstrap.com/template-overviews/clean-blog/ */
 </style>
 <body>
 
@@ -168,41 +171,52 @@
     <div class="col-md-6 col-md-offset-3">
         <form action="" method="post">
             <div class="form-group">
-                <label for="shortURL">Paste short URL</label>
-                <input type="text" class="form-control input-lg" id="shortURL" name="shortURL" placeholder="http://"
-                       required>
+                <label for="shortURL">Paste short URLs (one per line)</label>
+                <textarea id="shortURL" name="shortURL" class="form-control  input-lg" rows="10" required></textarea>
             </div>
             <p class="text-center">
-                <button type="submit" class="btn btn-lg btn-warning text-uppercase">View Long URL</button>
+                <button type="submit" class="btn btn-lg btn-warning text-uppercase">View Long URLs</button>
             </p>
         </form>
         <?php
-        if (isset($_POST['shortURL']) AND !empty($_POST['shortURL']) AND filter_var($_POST['shortURL'], FILTER_VALIDATE_URL)):
-            //Encode URL
-            $urlEncode = urlencode($_POST['shortURL']);
-            //Decode URL
-            $urlDecode = htmlspecialchars(urldecode($urlEncode), ENT_QUOTES);
-            //Get Headers
-            $getHeaders = get_headers($urlDecode, 1);
+        if (isset($_POST['shortURL']) AND !empty($_POST['shortURL'])):
+            echo '<div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered bg-white">
+                            <thead>
+                                <th>Short URL</th>
+                                <th>Long URL</th>
+                            </thead> <tbody>';
 
-            if(is_array($getHeaders['Location'])):
-                $location = current($getHeaders['Location']);
-            else:
-                $location = $getHeaders['Location'];
-            endif;
 
-            //If Redirect 301, 302 or 303 : Display URL
-            if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
-                echo '<p class="alert alert-success text-center">';
-                echo '<span class="glyphicon glyphicon-check" aria-hidden="true"></span> ';
-                echo '<a href="' . $location . '" target="_blank">' . $location . '</a>';
-                echo '</p>';
-            else:
-                echo '<p class="alert alert-danger text-center">';
-                echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ';
-                echo 'This url is not redirected';
-                echo '</p>';
-            endif;
+            foreach(explode("\n", $_POST['shortURL']) as $line) {
+                //Encode URL
+                $urlEncode = urlencode($line);
+                //Decode URL
+                $urlDecode = htmlspecialchars(urldecode($urlEncode), ENT_QUOTES);
+                //Delete chars first and end Url
+                $urlDecode = trim($urlDecode);
+                //Get Headers
+                $getHeaders = get_headers($urlDecode, 1);
+
+                if(is_array($getHeaders['Location'])):
+                    $location = current($getHeaders['Location']);
+                else:
+                    $location = $getHeaders['Location'];
+                endif;
+
+                echo '<tr>';
+                    //If Redirect 301, 302 or 303 : Display URL
+                    if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
+                        echo '<td>'.$urlDecode.'</td>';
+                        echo '<td><span class="glyphicon glyphicon-check" aria-hidden="true"></span> <a href="' . $location . '" target="_blank">' . $location . '</a></td>';
+                    else:
+                        echo '<td>'.$urlDecode.'</td>';
+                        echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> This url is not redirected</td>';
+                    endif;
+                echo '</tr>';
+            };
+            echo ' </tbody> </table> </div>';
+
         endif;
         ?>
     </div>
@@ -222,11 +236,13 @@
                 <li>and 200+ more...</li>
             </ul>
             </p>
+            <p class="text-right text-italic">by <a href="">short2longURL v0.2</a></p>
         </div>
     </div>
 </div>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 </body>
 </html>

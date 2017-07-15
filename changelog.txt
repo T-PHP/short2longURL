@@ -1,0 +1,8 @@
+Release Notes for Short 2 Long Url
+ --------------------------------
+# v0.2.0 - (2017-07-15)
+- Add Multiple Urls Check Page
+- Add Horizontal Menu
+# v0.1.0 - (2017-07-10)
+- First Commit
+
