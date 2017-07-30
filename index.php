@@ -222,6 +222,7 @@
                 <li>and 200+ more...</li>
             </ul>
             </p>
+            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL v0.2</a></p>
         </div>
     </div>
 </div>
