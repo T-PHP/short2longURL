@@ -10,7 +10,7 @@ Supported websites : goo.gl, bit.ly, tiny.cc, ow.ly, u.nu, tinyurl.com and 200+ 
 - Add Horizontal Menu
 
 ## Demo
-https://www.t-php.fr/demo/Short2LongURL/
+https://t-php.fr/demo/Short2LongURL/
 
 ## Preview
 ![Screenshot 1](img/screen1.png)
