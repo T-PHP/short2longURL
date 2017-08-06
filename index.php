@@ -169,8 +169,7 @@
         <form action="" method="post">
             <div class="form-group">
                 <label for="shortURL">Paste short URL</label>
-                <input type="text" class="form-control input-lg" id="shortURL" name="shortURL" placeholder="http://"
-                       required>
+                <input type="text" class="form-control input-lg" id="shortURL" name="shortURL" placeholder="http://" required>
             </div>
             <p class="text-center">
                 <button type="submit" class="btn btn-lg btn-warning text-uppercase">View Long URL</button>
@@ -222,7 +221,7 @@
                 <li>and 200+ more...</li>
             </ul>
             </p>
-            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL v0.2</a></p>
+            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL</a> v0.3</p>
         </div>
     </div>
 </div>

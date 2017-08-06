@@ -5,9 +5,9 @@ Two modes : check one or multiple urls
 
 Supported websites : goo.gl, bit.ly, tiny.cc, ow.ly, u.nu, tinyurl.com and 200+ more...
 
-## Version 0.2
-- Add Multiple Urls function
-- Add Horizontal Menu
+## Version 0.3
+- Add option for limit numbers of urls in Multiple Urls
+- Correct if empty / blank line in Mutliple Urls
 
 ## Demo
 https://demo.t-php.fr/short2longURL/

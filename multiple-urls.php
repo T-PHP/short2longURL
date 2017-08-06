@@ -180,7 +180,25 @@
         </form>
         <?php
         if (isset($_POST['shortURL']) AND !empty($_POST['shortURL'])):
-            //var_dump(count($_POST['shortURL'])); exit;
+            //Remove Empty Lines
+            $removeEmptyLines = preg_replace('/\n+/', "\n", $_POST['shortURL']);
+            $urls = explode("\n", $removeEmptyLines);
+            $urls = array_filter(array_map('trim', $urls));
+            //Convert array[0] to array[1]
+            array_unshift($urls,"");
+            unset($urls[0]);
+            //Count numbers of urls
+            $count_urls = count($urls);
+            //Define number of maximum urls to check
+            define('NB_URLS_MAX', '5');
+
+            //Display error
+            if($count_urls >= NB_URLS_MAX){
+                echo '<p class="alert alert-info text-center">';
+                echo '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> ';
+                echo 'Demonstration version. You can verify maximum '.NB_URLS_MAX.' urls.';
+                echo '</p>';
+            }
             echo '<div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered bg-white">
                             <thead>
@@ -188,9 +206,9 @@
                                 <th>Long URL</th>
                             </thead> <tbody>';
 
-            foreach(explode("\n", $_POST['shortURL']) as $line) {
-                //Verify if line is not empty
-                if (strlen(trim($line)) > 0) {
+            foreach($urls as $i => $line) {
+                //Display limit urls
+                if ($i <= NB_URLS_MAX) {
                     //Encode URL
                     $urlEncode = urlencode($line);
                     //Decode URL
@@ -239,7 +257,7 @@
                 <li>and 200+ more...</li>
             </ul>
             </p>
-            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL v0.2</a></p>
+            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL</a> v0.3</p>
         </div>
     </div>
 </div>

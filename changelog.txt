@@ -1,5 +1,8 @@
 Release Notes for Short 2 Long Url
  --------------------------------
+ # v0.3.0 - (2017-08-15)
+ - Add option for limit numbers of urls in Multiple Urls
+ - Correct if empty / blank line in Mutliple Urls
 # v0.2.0 - (2017-07-15)
 - Add Multiple Urls Check Page
 - Add Horizontal Menu
