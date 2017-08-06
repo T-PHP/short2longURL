@@ -180,6 +180,7 @@
         </form>
         <?php
         if (isset($_POST['shortURL']) AND !empty($_POST['shortURL'])):
+            //var_dump(count($_POST['shortURL'])); exit;
             echo '<div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered bg-white">
                             <thead>
@@ -187,33 +188,35 @@
                                 <th>Long URL</th>
                             </thead> <tbody>';
 
-
             foreach(explode("\n", $_POST['shortURL']) as $line) {
-                //Encode URL
-                $urlEncode = urlencode($line);
-                //Decode URL
-                $urlDecode = htmlspecialchars(urldecode($urlEncode), ENT_QUOTES);
-                //Delete chars first and end Url
-                $urlDecode = trim($urlDecode);
-                //Get Headers
-                $getHeaders = get_headers($urlDecode, 1);
+                //Verify if line is not empty
+                if (strlen(trim($line)) > 0) {
+                    //Encode URL
+                    $urlEncode = urlencode($line);
+                    //Decode URL
+                    $urlDecode = htmlspecialchars(urldecode($urlEncode), ENT_QUOTES);
+                    //Delete chars first and end Url
+                    $urlDecode = trim($urlDecode);
+                    //Get Headers
+                    $getHeaders = get_headers($urlDecode, 1);
 
-                if(is_array($getHeaders['Location'])):
-                    $location = current($getHeaders['Location']);
-                else:
-                    $location = $getHeaders['Location'];
-                endif;
+                    if (is_array($getHeaders['Location'])):
+                        $location = current($getHeaders['Location']);
+                    else:
+                        $location = $getHeaders['Location'];
+                    endif;
 
-                echo '<tr>';
+                    echo '<tr>';
                     //If Redirect 301, 302 or 303 : Display URL
                     if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
-                        echo '<td>'.$urlDecode.'</td>';
+                        echo '<td>' . $urlDecode . '</td>';
                         echo '<td><span class="glyphicon glyphicon-check" aria-hidden="true"></span> <a href="' . $location . '" target="_blank">' . $location . '</a></td>';
                     else:
-                        echo '<td>'.$urlDecode.'</td>';
+                        echo '<td>' . $urlDecode . '</td>';
                         echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> This url is not redirected</td>';
                     endif;
-                echo '</tr>';
+                    echo '</tr>';
+                }
             };
             echo ' </tbody> </table> </div>';
 
