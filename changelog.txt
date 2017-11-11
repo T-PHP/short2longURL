@@ -1,5 +1,5 @@
 Release Notes for Short 2 Long Url
-----------------------------------
+-----------------------------------
 # v0.4.0 - (2017-11-11)
  - Add function Authorized Websites List
  - Add response code
