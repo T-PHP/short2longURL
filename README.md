@@ -5,7 +5,7 @@ Two modes : check one or multiple urls
 
 Supported websites : goo.gl, bit.ly, tiny.cc, ow.ly, u.nu, tinyurl.com and 200+ more...
 
-## Version 0.4
+## Version 0.4.0
 - Add function Authorized Websites List
 - Add response code
 - Add CSS Class "glyphicon-check" & "glyphicon-remove"
