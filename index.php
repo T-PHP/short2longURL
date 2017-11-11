@@ -253,7 +253,7 @@
                 <li>and 200+ more...</li>
             </ul>
             </p>
-            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL</a> v0.4</p>
+            <p class="text-right text-italic">Powered by <a href="https://t-php.fr/39-decoder-url-redirigee-php.html">short2longURL</a> v0.4</p>
         </div>
     </div>
 </div>
