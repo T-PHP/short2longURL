@@ -176,6 +176,10 @@
             </p>
         </form>
         <?php
+        //Define authorized websites. Ex : array('goo.gl', 'bit.ly', 'tiny.cc')
+        //If blank, all websites are authorized. Ex : array()
+        $websites = array('goo.gl', 'bit.ly', 'tiny.cc');
+
         if (isset($_POST['shortURL']) AND !empty($_POST['shortURL']) AND filter_var($_POST['shortURL'], FILTER_VALIDATE_URL)):
             //Encode URL
             $urlEncode = urlencode($_POST['shortURL']);
@@ -183,6 +187,11 @@
             $urlDecode = htmlspecialchars(urldecode($urlEncode), ENT_QUOTES);
             //Get Headers
             $getHeaders = get_headers($urlDecode, 1);
+            //Get Response Code. Delete first chars with substr
+            $getCodeHeaders = substr($getHeaders[0], 9);
+            //Get Url Host (website.com)
+            $urlParse = parse_url($urlDecode);
+            $urlHost = $urlParse['host'];
 
             if(is_array($getHeaders['Location'])):
                 $location = current($getHeaders['Location']);
@@ -190,18 +199,42 @@
                 $location = $getHeaders['Location'];
             endif;
 
-            //If Redirect 301, 302 or 303 : Display URL
-            if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
-                echo '<p class="alert alert-success text-center">';
-                echo '<span class="glyphicon glyphicon-check" aria-hidden="true"></span> ';
-                echo '<a href="' . $location . '" target="_blank">' . $location . '</a>';
-                echo '</p>';
+            //Check if URL is authorized
+            if(in_array($urlHost, $websites)):
+                //If Redirect 301, 302 or 303 : Display URL
+                if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
+                    echo '<p class="alert alert-success text-center">';
+                    echo '<span class="glyphicon glyphicon-check" aria-hidden="true"></span> ';
+                    echo '<a href="' . $location . '" target="_blank">' . $location . '</a>';
+                    echo '</p>';
+                    echo '<p class="alert alert-warning text-center">Response code : '.$getCodeHeaders.'</p>';
+                else:
+                    echo '<p class="alert alert-danger text-center">';
+                    echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ';
+                    echo 'This url is not redirected';
+                    echo '</p>';
+                    echo '<p class="alert alert-warning text-center">Response code : '.$getCodeHeaders.'</p>';
+                endif;
+            elseif(empty($websites)):
+                //If Redirect 301, 302 or 303 : Display URL
+                if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
+                    echo '<p class="alert alert-success text-center">';
+                    echo '<span class="glyphicon glyphicon-check" aria-hidden="true"></span> ';
+                    echo '<a href="' . $location . '" target="_blank">' . $location . '</a>';
+                    echo '</p>';
+                    echo '<p class="alert alert-warning text-center">Response code : '.$getCodeHeaders.'</p>';
+                else:
+                    echo '<p class="alert alert-danger text-center">';
+                    echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ';
+                    echo 'This url is not redirected';
+                    echo '</p>';
+                    echo '<p class="alert alert-warning text-center">Response code : '.$getCodeHeaders.'</p>';
+                endif;
             else:
-                echo '<p class="alert alert-danger text-center">';
-                echo '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ';
-                echo 'This url is not redirected';
-                echo '</p>';
+                echo '<p class="alert alert-danger text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> This website is unauthorized</p>';
             endif;
+
+
         endif;
         ?>
     </div>
@@ -221,7 +254,7 @@
                 <li>and 200+ more...</li>
             </ul>
             </p>
-            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL</a> v0.3</p>
+            <p class="text-right text-italic">Powered by <a href="https://t-php.fr">short2longURL</a> v0.4</p>
         </div>
     </div>
 </div>

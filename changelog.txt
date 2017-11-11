@@ -1,6 +1,10 @@
 Release Notes for Short 2 Long Url
- --------------------------------
- # v0.3.0 - (2017-08-15)
+----------------------------------
+# v0.4.0 - (2017-11-11)
+ - Add function Authorized Websites List
+ - Add response code
+ - Add CSS Class "glyphicon-check" & "glyphicon-remove"
+# v0.3.0 - (2017-08-15)
  - Add option for limit numbers of urls in Multiple Urls
  - Correct if empty / blank line in Mutliple Urls
 # v0.2.0 - (2017-07-15)

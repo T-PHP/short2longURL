@@ -134,6 +134,12 @@
             -o-transform: translate3d(0, 100%, 0);
             transform: translate3d(0, 100%, 0);
         }
+        .glyphicon-check {
+            color: green;
+        }
+        .glyphicon-remove {
+            color: red;
+        }
     }
         /* End By Clean Blog https://startbootstrap.com/template-overviews/clean-blog/ */
 </style>
@@ -191,7 +197,9 @@
             $count_urls = count($urls);
             //Define number of maximum urls to check
             define('NB_URLS_MAX', '5');
-
+            //Define authorized websites. Ex : array('goo.gl', 'bit.ly', 'tiny.cc')
+            //If blank, all websites are authorized. Ex : array()
+            $websites = array('goo.gl', 'bit.ly', 'tiny.cc');
             //Display error
             if($count_urls >= NB_URLS_MAX){
                 echo '<p class="alert alert-info text-center">';
@@ -204,9 +212,14 @@
                             <thead>
                                 <th>Short URL</th>
                                 <th>Long URL</th>
+                                <th>Response Code</th>
                             </thead> <tbody>';
 
             foreach($urls as $i => $line) {
+
+
+
+
                 //Display limit urls
                 if ($i <= NB_URLS_MAX) {
                     //Encode URL
@@ -217,6 +230,11 @@
                     $urlDecode = trim($urlDecode);
                     //Get Headers
                     $getHeaders = get_headers($urlDecode, 1);
+                    //Get Response Code. Delete first chars with substr
+                    $getCodeHeaders = substr($getHeaders[0], 9);
+                    //Get Url Host (website.com)
+                    $urlParse = parse_url($urlDecode);
+                    $urlHost = $urlParse['host'];
 
                     if (is_array($getHeaders['Location'])):
                         $location = current($getHeaders['Location']);
@@ -224,16 +242,35 @@
                         $location = $getHeaders['Location'];
                     endif;
 
-                    echo '<tr>';
-                    //If Redirect 301, 302 or 303 : Display URL
-                    if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
-                        echo '<td>' . $urlDecode . '</td>';
-                        echo '<td><span class="glyphicon glyphicon-check" aria-hidden="true"></span> <a href="' . $location . '" target="_blank">' . $location . '</a></td>';
+                    //Check if URL is authorized
+                    if(in_array($urlHost, $websites)):
+                        echo '<tr>';
+                        //If Redirect 301, 302 or 303 : Display URL
+                        if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
+                            echo '<td>' . $urlDecode . '</td>';
+                            echo '<td><span class="glyphicon glyphicon-check" aria-hidden="true"></span> <a href="' . $location . '" target="_blank">' . $location . '</a></td>';
+                            echo '<td>'.$getCodeHeaders.'</td>';
+                        else:
+                            echo '<td>' . $urlDecode . '</td>';
+                            echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> This url is not redirected</td>';
+                            echo '<td>'.$getCodeHeaders.'</td>';
+                        endif;
+                        echo '</tr>';
+                    elseif(empty($websites)):
+                        echo '<tr>';
+                        //If Redirect 301, 302 or 303 : Display URL
+                        if (strpos($getHeaders[0], '301') || strpos($getHeaders[0], '302') || strpos($getHeaders[0], '303') !== false):
+                            echo '<td>' . $urlDecode . '</td>';
+                            echo '<td><span class="glyphicon glyphicon-check" aria-hidden="true"></span> <a href="' . $location . '" target="_blank">' . $location . '</a></td>';
+                            echo '<td>'.$getCodeHeaders.'</td>';
+                        else:
+                            echo '<td>' . $urlDecode . '</td>';
+                            echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> This url is not redirected</td>';
+                            echo '<td>'.$getCodeHeaders.'</td>';
+                        endif;
+                        echo '</tr>';
                     else:
-                        echo '<td>' . $urlDecode . '</td>';
-                        echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> This url is not redirected</td>';
                     endif;
-                    echo '</tr>';
                 }
             };
             echo ' </tbody> </table> </div>';
